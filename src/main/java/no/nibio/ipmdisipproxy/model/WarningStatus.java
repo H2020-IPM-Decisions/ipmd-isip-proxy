@@ -8,8 +8,8 @@ public enum WarningStatus {
     INFECTION_IMPROBABLE(2, 1),
     INFECTION_POSSIBLE(3, 2),
     INFECTION_PROBABLE(4, 3);
-    private int ipmCode;
-    private int isipCode;
+    private final int ipmCode;
+    private final int isipCode;
 
     WarningStatus(int ipmCode, int isipCode) {
         this.ipmCode = ipmCode;

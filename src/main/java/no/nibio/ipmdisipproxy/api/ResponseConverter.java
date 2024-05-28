@@ -7,8 +7,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * ResponseConverter contains methods for converting a given ISIP response to IPMD format
+ */
 public class ResponseConverter {
 
+    /**
+     * Convert ISIP response to IPMD format
+     *
+     * @param timeZone     The timezone of the given dates - CURRENTLY NOT IN USE
+     * @param longitude    The longitude of the location
+     * @param latitude     The latitude of the location
+     * @param disease      The disease for which the model has been run
+     * @param isipResponse The response from the ISIP endpoint
+     * @return The response in IPMD format
+     */
     public static IpmdResponse isipToImpdResponse(String timeZone, double longitude, double latitude, Disease disease, IsipResponse isipResponse) {
         IsipResponse.Nodes.Result.Variable dateResult = isipResponse.getNodes().getResult().getVariables().get("date");
         String dateTimeStart = findDateTimeStart(timeZone, dateResult.getData());
@@ -27,6 +40,13 @@ public class ResponseConverter {
         return ipmdResponse;
     }
 
+    /**
+     * Find the very first date in the given list of dates, return as datetime at start of day
+     *
+     * @param timeZone CURRENTLY NOT IN USE
+     * @param dates    List of date strings 'yyyy-MM-dd'
+     * @return datetime string in the format 'yyyy-MM-ddTHH:mm:ssZ'
+     */
     static String findDateTimeStart(String timeZone, List<String> dates) {
         if (dates != null && !dates.isEmpty()) {
             LocalDate localDate = LocalDate.parse(dates.get(0));
@@ -39,6 +59,13 @@ public class ResponseConverter {
         return null;
     }
 
+    /**
+     * Find the very last date in the given list of dates, return as datetime at hour 23
+     *
+     * @param timeZone CURRENTLY NOT IN USE
+     * @param dates    List of date strings 'yyyy-MM-dd'
+     * @return datetime string in the format 'yyyy-MM-ddTHH:mm:ssZ'
+     */
     static String findDateTimeEnd(String timeZone, List<String> dates) {
         if (dates != null && !dates.isEmpty()) {
             LocalDate localDate = LocalDate.parse(dates.get(dates.size() - 1));

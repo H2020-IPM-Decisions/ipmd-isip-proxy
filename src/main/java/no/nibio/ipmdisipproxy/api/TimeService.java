@@ -6,6 +6,9 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
+/**
+ * TimeService was introduced in order for the unit tests to be able to manipulate current date
+ */
 @Service
 public class TimeService {
     private final Clock clock;

@@ -13,6 +13,11 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * IsipService contains the code for posting requests to the ISIP siggetreide model endpoint.
+ *
+ * @since 0.0.1
+ */
 @Service
 public class IsipService {
 
@@ -31,7 +36,6 @@ public class IsipService {
         String url = buildUrl(token);
         ResponseEntity<IsipResponse> response;
         try {
-            LOGGER.info("POST request to {}", baseUrl);
             response = restTemplate.postForEntity(url, isipRequest, IsipResponse.class);
         } catch (HttpClientErrorException e) {
             LOGGER.error("Client error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());

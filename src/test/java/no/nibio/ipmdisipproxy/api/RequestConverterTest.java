@@ -25,7 +25,7 @@ class RequestConverterTest {
         ZonedDateTime end = ZonedDateTime.parse("2024-02-15T05:00:00Z");
         int interval = 3600;
 
-        List<String> dateTimeList = RequestConverter.convertDateTimeList(start, end, interval);
+        List<String> dateTimeList = RequestConverter.createDateTimeList(start, end, interval);
         assertThat(dateTimeList, notNullValue());
         assertThat(dateTimeList.size(), equalTo(7));
         assertThat(dateTimeList.get(0), equalTo("2024-02-14 23:00"));

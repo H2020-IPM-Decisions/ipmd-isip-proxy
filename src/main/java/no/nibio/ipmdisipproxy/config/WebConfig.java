@@ -10,7 +10,6 @@ public class WebConfig implements WebMvcConfigurer {
     private final EppoToCropConverter eppoToCropConverter;
     private final EppoToDiseaseConverter eppoToDiseaseConverter;
 
-
     public WebConfig(EppoToCropConverter eppoToCropConverter, EppoToDiseaseConverter eppoToDiseaseConverter) {
         this.eppoToCropConverter = eppoToCropConverter;
         this.eppoToDiseaseConverter = eppoToDiseaseConverter;
