@@ -46,7 +46,7 @@ public class ApiController {
     @PostMapping("/siggetreide")
     public ResponseEntity<IpmdResponse> triggerSiggetreide(
             @RequestBody IpmdRequest ipmdRequest,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationHeader) {
 
         String token = extractTokenFromHeader(authorizationHeader);
         String simulationDate = timeService.getCurrentDate().toString();
@@ -92,7 +92,7 @@ public class ApiController {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.substring(7);
         } else {
-            throw new UnauthorizedException("Invalid Authorization header");
+            throw new UnauthorizedException("Missing or invalid header 'Authorization'");
         }
     }
 
