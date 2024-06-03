@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class ResponseConverterTest {
 
@@ -31,6 +32,29 @@ class ResponseConverterTest {
         assertThat(ipmdResponse, notNullValue());
         assertThat(ipmdResponse.getLocationResult().get(0).getLongitude(), equalTo(LONGITUDE));
         assertThat(ipmdResponse.getLocationResult().get(0).getLatitude(), equalTo(LATITUDE));
+
+        List<String> isipWarningStatuses = isipResponse.getNodes().getResult().getVariables().get("brown rust").getData();
+        List<Integer> ipmdWarningStatuses = ipmdResponse.getLocationResult().get(0).getWarningStatus();
+        int currentIndex = 0;
+        for (String isipWS : isipWarningStatuses) {
+            switch (isipWS) {
+                case "0":
+                    assertThat(ipmdWarningStatuses.get(currentIndex), equalTo(0));
+                    break;
+                case "1":
+                    assertThat(ipmdWarningStatuses.get(currentIndex), equalTo(2));
+                    break;
+                case "2":
+                    assertThat(ipmdWarningStatuses.get(currentIndex), equalTo(3));
+                    break;
+                case "3":
+                    assertThat(ipmdWarningStatuses.get(currentIndex), equalTo(4));
+                    break;
+                default:
+                    fail("Unexpected ISIP warning status " + isipWS);
+            }
+            currentIndex++;
+        }
     }
 
     @Test

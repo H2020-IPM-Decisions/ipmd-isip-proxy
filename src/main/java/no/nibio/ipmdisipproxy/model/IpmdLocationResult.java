@@ -12,7 +12,7 @@ public class IpmdLocationResult {
     private List<Integer> warningStatus;
 
     public IpmdLocationResult() {
-        data = Collections.singletonList(new ArrayList<>());
+        data = new ArrayList<>();
         warningStatus = new ArrayList<>();
     }
 
