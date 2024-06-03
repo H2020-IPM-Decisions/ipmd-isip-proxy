@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static no.nibio.ipmdisipproxy.api.RequestConverter.createDateTimeList;
 import static no.nibio.ipmdisipproxy.api.RequestConverter.ipmdToIsipRequest;
 import static no.nibio.ipmdisipproxy.api.ResponseConverter.isipToImpdResponse;
 
@@ -57,6 +58,7 @@ public class ApiController {
         validateParameters(crop, disease, weatherData);
 
         IpmdLocationWeatherData locationWeatherData = weatherData.getLocationWeatherData().get(0);
+
         Double longitude = locationWeatherData.getLongitude();
         Double latitude = locationWeatherData.getLatitude();
 
@@ -113,6 +115,11 @@ public class ApiController {
         List<IpmdLocationWeatherData> locationWeatherDataList = weatherData.getLocationWeatherData();
         if (locationWeatherDataList.size() != 1) {
             throw new BadRequestException("Unexpected number of location weather data in request: " + locationWeatherDataList.size());
+        }
+        IpmdLocationWeatherData locationWeatherData = weatherData.getLocationWeatherData().get(0);
+        List<String> dateTimeList = createDateTimeList(weatherData.getTimeStart(), weatherData.getTimeEnd(), weatherData.getInterval());
+        if (dateTimeList.size() != locationWeatherData.getLength()) {
+            throw new BadRequestException(String.format("The number of weather data points [%s] is not equal to the number of timestamps [%s]", locationWeatherData.getLength(), dateTimeList.size()));
         }
     }
 

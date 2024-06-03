@@ -68,6 +68,20 @@ public class ApiControllerTest {
     }
 
     @Test
+    public void testPostCallWithInvalidWeatherData() throws Exception {
+        String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request_invalid_weather_data.json");
+
+        ResultActions resultActions = mockMvc.perform(post("/siggetreide")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(impdRequest)
+                        .header("Authorization", "Bearer " + TOKEN)
+                )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("The number of weather data points [2446] is not equal to the number of timestamps [2494]"));
+    }
+
+    @Test
     public void testPostCallWithoutAuthorizationHeader() throws Exception {
         String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
 

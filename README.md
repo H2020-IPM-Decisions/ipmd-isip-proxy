@@ -12,6 +12,8 @@ The application was built using the following main technologies
 - SpringBoot 2.7.1
 - Apache Maven 3.9.6
 
+The Java and SpringBoot versions can not be updated before the environment in which the application will run is updated. 
+
 ## Getting started
 
 Clone the Github repository to get the latest version of the code
