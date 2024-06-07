@@ -8,14 +8,14 @@ import java.util.stream.Stream;
 public enum Disease {
 
     BROWN_RUST("PUCCRE", "brown rust"),
-    DTR("AAA", "dtr"),
-    POWDERY_MILDEW("BBB", "powdery mildew"),
-    SEPTORIA_TRITICI("CCC", "septoria tritici"),
-    YELLOW_RUST("DDD", "yellow rust"),
-    LEAF_BLOTCH("EEE", "leaf blotch"),
-    LEAF_RUST("FFF", "leaf rust"),
-    NET_BLOTCH("GGG", "net blotch"),
-    RAMULARIA("HHH", "ramularia");
+    DTR("PYRNTR", "dtr"),
+    POWDERY_MILDEW("ERYSGR", "powdery mildew"),
+    SEPTORIA_TRITICI("SEPTTR", "septoria tritici"),
+    YELLOW_RUST("PUCCST", "yellow rust"),
+    LEAF_BLOTCH("RHYNSE", "leaf blotch"),
+    LEAF_RUST("PUCCHD", "leaf rust"),
+    NET_BLOTCH("PYRNTE", "net blotch"),
+    RAMULARIA("RAMUCC", "ramularia");
 
     private final String eppoCode;
     private final String isipName;
