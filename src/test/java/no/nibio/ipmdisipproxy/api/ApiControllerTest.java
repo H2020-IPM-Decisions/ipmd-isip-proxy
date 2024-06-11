@@ -24,85 +24,66 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @WebMvcTest(controllers = ApiController.class)
 public class ApiControllerTest {
-    private static final String SIMULATION_DATE = "2024-05-01";
-    private static final String TOKEN = "thisisatoken";
+  private static final String SIMULATION_DATE = "2024-05-01";
+  private static final String TOKEN = "thisisatoken";
 
-    @Value("${model.base.url}")
-    private String baseUrl;
+  @Value("${model.base.url}")
+  private String baseUrl;
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private IsipService isipService;
+  @MockBean private IsipService isipService;
 
-    @MockBean
-    private TimeService timeService;
+  @MockBean private TimeService timeService;
 
-    @InjectMocks
-    private ApiController apiController;
+  @InjectMocks private ApiController apiController;
 
-    @BeforeEach
-    public void setup() {
-        when(timeService.getCurrentDate()).thenReturn(LocalDate.parse(SIMULATION_DATE));
-        when(isipService.triggerSiggetreide(
-                any(IsipRequest.class),
-                eq(TOKEN))
-        ).thenReturn(TestUtils.readJsonFromFile("src/test/resources/isip_response.json", IsipResponse.class));
-    }
+  @BeforeEach
+  public void setup() {
+    when(timeService.getCurrentDate()).thenReturn(LocalDate.parse(SIMULATION_DATE));
+    when(isipService.triggerSiggetreide(any(IsipRequest.class), eq(TOKEN)))
+        .thenReturn(
+            TestUtils.readJsonFromFile(
+                "src/test/resources/isip_response.json", IsipResponse.class));
+  }
 
-    @Test
-    public void testValidPostCall() throws Exception {
-        String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
+  @Test
+  public void testValidPostCall() throws Exception {
+    String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
 
-        ResultActions resultActions = mockMvc.perform(post("/siggetreide")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(impdRequest)
-                        .header("Authorization", "Bearer " + TOKEN)
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        // resultActions.andDo(MockMvcResultHandlers.print());
-        resultActions
-                .andExpect(MockMvcResultMatchers.jsonPath("$.timeStart").value("2024-02-15T00:00:00Z"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.timeEnd").value("2024-05-22T23:00:00Z"));
-    }
+    ResultActions resultActions =
+        mockMvc
+            .perform(
+                post("/siggetreide")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(impdRequest)
+                    .header("Authorization", "Bearer " + TOKEN))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+    // resultActions.andDo(MockMvcResultHandlers.print());
+    resultActions
+        .andExpect(MockMvcResultMatchers.jsonPath("$.timeStart").value("2024-02-15T00:00:00Z"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.timeEnd").value("2024-05-22T23:00:00Z"));
+  }
 
-    @Test
-    public void testPostCallWithInvalidWeatherData() throws Exception {
-        String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request_invalid_weather_data.json");
+  @Test
+  public void testPostCallWithoutAuthorizationHeader() throws Exception {
+    String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
 
-        ResultActions resultActions = mockMvc.perform(post("/siggetreide")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(impdRequest)
-                        .header("Authorization", "Bearer " + TOKEN)
-                )
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-        resultActions
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("The number of weather data points [2446] is not equal to the number of timestamps [2494]"));
-    }
+    mockMvc
+        .perform(post("/siggetreide").contentType(MediaType.APPLICATION_JSON).content(impdRequest))
+        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+  }
 
-    @Test
-    public void testPostCallWithoutAuthorizationHeader() throws Exception {
-        String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
+  @Test
+  public void testPostCallWithInvalidAuthorizationHeader() throws Exception {
+    String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
 
-        mockMvc.perform(post("/siggetreide")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(impdRequest)
-                )
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-    }
-
-    @Test
-    public void testPostCallWithInvalidAuthorizationHeader() throws Exception {
-        String impdRequest = TestUtils.readStringFromFile("src/test/resources/ipmd_request.json");
-
-        mockMvc.perform(post("/siggetreide")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(impdRequest)
-                        .header("Authorization", "BrownBear " + TOKEN)
-                )
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-    }
-
-
+    mockMvc
+        .perform(
+            post("/siggetreide")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(impdRequest)
+                .header("Authorization", "BrownBear " + TOKEN))
+        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+  }
 }

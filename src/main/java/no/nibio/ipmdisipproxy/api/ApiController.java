@@ -1,5 +1,9 @@
 package no.nibio.ipmdisipproxy.api;
 
+import static no.nibio.ipmdisipproxy.api.RequestConverter.ipmdToIsipRequest;
+import static no.nibio.ipmdisipproxy.api.ResponseConverter.isipToImpdResponse;
+
+import java.util.List;
 import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import no.nibio.ipmdisipproxy.exception.UnauthorizedException;
 import no.nibio.ipmdisipproxy.model.*;
@@ -10,12 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static no.nibio.ipmdisipproxy.api.RequestConverter.createDateTimeList;
-import static no.nibio.ipmdisipproxy.api.RequestConverter.ipmdToIsipRequest;
-import static no.nibio.ipmdisipproxy.api.ResponseConverter.isipToImpdResponse;
 
 /**
  * ApiController is a REST controller which provides an endpoint for triggering the siggetreide model
@@ -78,8 +76,8 @@ public class ApiController {
                         latitude,
                         disease,
                         isipService.triggerSiggetreide(
-                                isipRequest,
-                                token
+                            isipRequest,
+                            token
                         )
                 ));
     }
@@ -115,11 +113,6 @@ public class ApiController {
         List<IpmdLocationWeatherData> locationWeatherDataList = weatherData.getLocationWeatherData();
         if (locationWeatherDataList.size() != 1) {
             throw new BadRequestException("Unexpected number of location weather data in request: " + locationWeatherDataList.size());
-        }
-        IpmdLocationWeatherData locationWeatherData = weatherData.getLocationWeatherData().get(0);
-        List<String> dateTimeList = createDateTimeList(weatherData.getTimeStart(), weatherData.getTimeEnd(), weatherData.getInterval());
-        if (dateTimeList.size() != locationWeatherData.getLength()) {
-            throw new BadRequestException(String.format("The number of weather data points [%s] is not equal to the number of timestamps [%s]", locationWeatherData.getLength(), dateTimeList.size()));
         }
     }
 
