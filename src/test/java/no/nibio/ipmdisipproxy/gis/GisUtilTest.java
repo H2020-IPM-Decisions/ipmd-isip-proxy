@@ -1,9 +1,7 @@
 package no.nibio.ipmdisipproxy.gis;
 
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
@@ -17,15 +15,19 @@ public class GisUtilTest {
     {
         System.out.println("isLocationInsideGermany");
         GISUtil instance = new GISUtil();
-        Double longitude = 10.0;
-        Double latitude = 10.0;
+        
         try{
-            Boolean result = instance.isLocationInsideGermany(longitude, latitude);
-            //assertFalse(instance.isLocationInsideGermany(longitude, latitude));
+            // Location outside Germany
+            Double longitude = 10.0;
+            Double latitude = 10.0;
+            assertFalse(instance.isLocationInsideGermany(longitude, latitude));
+            //Location inside Germany
+            longitude = 11.14;
+            latitude = 50.71;
+            assertTrue(instance.isLocationInsideGermany(longitude, latitude));
         }
         catch(IOException ex)
         {
-            ex.printStackTrace();
             fail(ex.getMessage());
         }
     }
