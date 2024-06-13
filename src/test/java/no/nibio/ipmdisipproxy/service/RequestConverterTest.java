@@ -1,7 +1,8 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import no.nibio.ipmdisipproxy.model.WeatherDataParameter;
+import no.nibio.ipmdisipproxy.service.RequestConverter;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;

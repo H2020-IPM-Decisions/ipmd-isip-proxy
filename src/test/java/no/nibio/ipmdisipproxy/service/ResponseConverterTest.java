@@ -1,9 +1,10 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.TestUtils;
 import no.nibio.ipmdisipproxy.model.Disease;
 import no.nibio.ipmdisipproxy.model.IpmdResponse;
 import no.nibio.ipmdisipproxy.model.IsipResponse;
+import no.nibio.ipmdisipproxy.service.ResponseConverter;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 

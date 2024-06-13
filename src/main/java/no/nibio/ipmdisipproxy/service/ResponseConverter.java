@@ -1,4 +1,4 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.model.*;
 

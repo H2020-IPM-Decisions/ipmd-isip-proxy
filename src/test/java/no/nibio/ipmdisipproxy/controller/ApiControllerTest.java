@@ -1,8 +1,10 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.controller;
 
 import no.nibio.ipmdisipproxy.TestUtils;
 import no.nibio.ipmdisipproxy.model.IsipRequest;
 import no.nibio.ipmdisipproxy.model.IsipResponse;
+import no.nibio.ipmdisipproxy.service.IsipService;
+import no.nibio.ipmdisipproxy.service.TimeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,8 +1,10 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.controller;
 
 import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import no.nibio.ipmdisipproxy.exception.UnauthorizedException;
 import no.nibio.ipmdisipproxy.model.*;
+import no.nibio.ipmdisipproxy.service.IsipService;
+import no.nibio.ipmdisipproxy.service.TimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static no.nibio.ipmdisipproxy.api.RequestConverter.ipmdToIsipRequest;
-import static no.nibio.ipmdisipproxy.api.ResponseConverter.isipToImpdResponse;
+import static no.nibio.ipmdisipproxy.service.RequestConverter.ipmdToIsipRequest;
+import static no.nibio.ipmdisipproxy.service.ResponseConverter.isipToImpdResponse;
 
 /**
  * ApiController is a REST controller which provides an endpoint for triggering the siggetreide model

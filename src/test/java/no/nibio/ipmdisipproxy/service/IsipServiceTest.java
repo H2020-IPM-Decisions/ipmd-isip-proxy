@@ -1,8 +1,9 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.exception.ExternalApiException;
 import no.nibio.ipmdisipproxy.model.IsipRequest;
 import no.nibio.ipmdisipproxy.model.IsipResponse;
+import no.nibio.ipmdisipproxy.service.IsipService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
