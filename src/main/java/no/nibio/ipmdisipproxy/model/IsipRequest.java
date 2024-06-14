@@ -1,6 +1,8 @@
 package no.nibio.ipmdisipproxy.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -13,12 +15,12 @@ public class IsipRequest {
 
     }
 
-    public IsipRequest(double longitude, double latitude, String simulationDate, String crop, String disease) {
+    public IsipRequest(double latitude, double longitude, String simulationDate, String crop, String disease) {
         this.variables = new Variables();
         this.variables.crop = new Variable<>(crop);
         this.variables.disease = new Variable<>(disease);
-        this.variables.longitude = new Variable<>(longitude);
         this.variables.latitude = new Variable<>(latitude);
+        this.variables.longitude = new Variable<>(longitude);
         this.variables.simulationDate = new Variable<>(simulationDate);
     }
 
@@ -29,13 +31,13 @@ public class IsipRequest {
     public void setVariables(Variables variables) {
         this.variables = variables;
     }
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Variables {
 
         private Variable<String> crop;
         private Variable<String> disease;
-        private Variable<Double> longitude;
         private Variable<Double> latitude;
+        private Variable<Double> longitude;
         @JsonProperty("simulation_date")
         private Variable<String> simulationDate;
         @JsonProperty("date_time")
@@ -64,20 +66,20 @@ public class IsipRequest {
             this.disease = disease;
         }
 
-        public Variable<Double> getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(Variable<Double> longitude) {
-            this.longitude = longitude;
-        }
-
         public Variable<Double> getLatitude() {
             return latitude;
         }
 
         public void setLatitude(Variable<Double> latitude) {
             this.latitude = latitude;
+        }
+
+        public Variable<Double> getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(Variable<Double> longitude) {
+            this.longitude = longitude;
         }
 
         public Variable<String> getSimulationDate() {

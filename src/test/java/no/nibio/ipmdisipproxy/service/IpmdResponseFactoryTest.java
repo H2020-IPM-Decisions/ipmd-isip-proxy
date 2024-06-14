@@ -4,7 +4,6 @@ import no.nibio.ipmdisipproxy.TestUtils;
 import no.nibio.ipmdisipproxy.model.Disease;
 import no.nibio.ipmdisipproxy.model.IpmdResponse;
 import no.nibio.ipmdisipproxy.model.IsipResponse;
-import no.nibio.ipmdisipproxy.service.ResponseConverter;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class ResponseConverterTest {
+class IpmdResponseFactoryTest {
 
     public static final String EUROPE_OSLO = "Europe/Oslo";
     private static final Double LONGITUDE = 10.520647689700128;
@@ -29,7 +28,7 @@ class ResponseConverterTest {
     @Test
     public void testConversion() {
         IsipResponse isipResponse = TestUtils.readJsonFromFile("src/test/resources/isip_response.json", IsipResponse.class);
-        IpmdResponse ipmdResponse = ResponseConverter.isipToImpdResponse(EUROPE_OSLO, LONGITUDE, LATITUDE, DISEASE, isipResponse);
+        IpmdResponse ipmdResponse = IpmdResponseFactory.createImpdResponse(EUROPE_OSLO, LATITUDE, LONGITUDE, DISEASE, isipResponse);
         assertThat(ipmdResponse, notNullValue());
         assertThat(ipmdResponse.getLocationResult().get(0).getLongitude(), equalTo(LONGITUDE));
         assertThat(ipmdResponse.getLocationResult().get(0).getLatitude(), equalTo(LATITUDE));
@@ -60,27 +59,27 @@ class ResponseConverterTest {
 
     @Test
     public void findDateTimeStartValid() {
-        String dateTimeStart = ResponseConverter.findDateTimeStart(EUROPE_OSLO, DATES);
+        String dateTimeStart = IpmdResponseFactory.findDateTimeStart(EUROPE_OSLO, DATES);
         assertThat(dateTimeStart, notNullValue());
         assertThat(dateTimeStart, CoreMatchers.equalTo("2024-02-01T00:00:00Z"));
     }
 
     @Test
     public void findDateTimeStartEmpty() {
-        String dateTimeStart = ResponseConverter.findDateTimeStart(EUROPE_OSLO, Collections.emptyList());
+        String dateTimeStart = IpmdResponseFactory.findDateTimeStart(EUROPE_OSLO, Collections.emptyList());
         assertThat(dateTimeStart, nullValue());
     }
 
     @Test
     public void findDateTimeEndValid() {
-        String dateTimeEnd = ResponseConverter.findDateTimeEnd(EUROPE_OSLO, DATES);
+        String dateTimeEnd = IpmdResponseFactory.findDateTimeEnd(EUROPE_OSLO, DATES);
         assertThat(dateTimeEnd, notNullValue());
         assertThat(dateTimeEnd, CoreMatchers.equalTo("2024-02-03T23:00:00Z"));
     }
 
     @Test
     public void findDateTimeEndEmpty() {
-        String dateTimeEnd = ResponseConverter.findDateTimeEnd(EUROPE_OSLO, Collections.emptyList());
+        String dateTimeEnd = IpmdResponseFactory.findDateTimeEnd(EUROPE_OSLO, Collections.emptyList());
         assertThat(dateTimeEnd, nullValue());
     }
 

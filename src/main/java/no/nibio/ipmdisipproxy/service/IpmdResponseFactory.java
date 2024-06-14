@@ -8,26 +8,32 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * ResponseConverter contains methods for converting a given ISIP response to IPMD format
+ * Factory class for creating {@link IpmdResponse} objects.
+ *
+ * <p>This class provides static methods for creating instances of {@link IpmdResponse}. It abstracts
+ * the creation logic, making it easier to manage the instantiation process.
+ *
+ * @see IpmdResponse
+ * @since 0.0.1
  */
-public class ResponseConverter {
+public class IpmdResponseFactory {
 
     /**
-     * Convert ISIP response to IPMD format
+     * Create IPMD response based on the given information
      *
      * @param timeZone     The timezone of the given dates - CURRENTLY NOT IN USE
-     * @param longitude    The longitude of the location
      * @param latitude     The latitude of the location
+     * @param longitude    The longitude of the location
      * @param disease      The disease for which the model has been run
      * @param isipResponse The response from the ISIP endpoint
      * @return The response in IPMD format
      */
-    public static IpmdResponse isipToImpdResponse(String timeZone, double longitude, double latitude, Disease disease, IsipResponse isipResponse) {
+    public static IpmdResponse createImpdResponse(String timeZone, double latitude, double longitude, Disease disease, IsipResponse isipResponse) {
         IsipResponse.Nodes.Result.Variable dateResult = isipResponse.getNodes().getResult().getVariables().get("date");
         String dateTimeStart = findDateTimeStart(timeZone, dateResult.getData());
         String dateTimeEnd = findDateTimeEnd(timeZone, dateResult.getData());
 
-        IpmdResponse ipmdResponse = new IpmdResponse(dateTimeStart, dateTimeEnd, longitude, latitude);
+        IpmdResponse ipmdResponse = new IpmdResponse(dateTimeStart, dateTimeEnd, latitude, longitude);
 
         IsipResponse.Nodes.Result.Variable diseaseResult = isipResponse.getNodes().getResult().getVariables().get(disease.getIsipName());
 
