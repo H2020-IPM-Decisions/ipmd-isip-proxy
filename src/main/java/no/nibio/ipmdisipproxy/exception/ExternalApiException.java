@@ -2,6 +2,9 @@ package no.nibio.ipmdisipproxy.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @since 1.0.0
+ */
 public class ExternalApiException extends IpmdIsipProxyException {
 
     public ExternalApiException(String message) {

@@ -48,11 +48,11 @@ $ ./mvnw clean package
 
 Run jar file with default settings:
 ```
-$ java -jar target/ipmd-isip-proxy-0.0.2.jar
+$ java -jar target/ipmd-isip-proxy-1.0.0.jar
 ```
 or configured:
 ```
-$ java -jar target/ipmd-isip-proxy-0.0.2.jar --PORT=13 --CONTEXT_PATH=/alternative --LOG_FILE=logs/another_file.log
+$ java -jar target/ipmd-isip-proxy-1.0.0.jar --PORT=13 --CONTEXT_PATH=/alternative --LOG_FILE=logs/another_file.log
 ```
 
 ### Test endpoint locally

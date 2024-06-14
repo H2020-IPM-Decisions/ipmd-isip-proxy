@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+/**
+ * @since 1.0.0
+ */
 @SpringBootTest
 class GISServiceTest {
 

@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @since 1.0.0
+ */
 public class IsipResponse {
     private Attributes attributes;
     private Nodes nodes;

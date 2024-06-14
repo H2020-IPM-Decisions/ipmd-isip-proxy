@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+/**
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
     Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);

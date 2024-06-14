@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 
 /**
  * TimeService was introduced in order for the unit tests to be able to manipulate current date
+ *
+ * @since 1.0.0
  */
 @Service
 public class TimeService {

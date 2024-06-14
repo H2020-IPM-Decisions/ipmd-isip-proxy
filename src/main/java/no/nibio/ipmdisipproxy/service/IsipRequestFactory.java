@@ -20,7 +20,7 @@ import static no.nibio.ipmdisipproxy.model.WeatherDataParameter.*;
  * the creation logic, making it easier to manage the instantiation process.
  *
  * @see IsipRequest
- * @since 0.0.1
+ * @since 1.0.0
  */
 public class IsipRequestFactory {
 

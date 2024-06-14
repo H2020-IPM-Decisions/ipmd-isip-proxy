@@ -1,11 +1,14 @@
 package no.nibio.ipmdisipproxy.model;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
+/**
+ * @since 1.0.0
+ */
 public class IsipRequest {
 
     @JsonProperty("variables")
@@ -31,6 +34,7 @@ public class IsipRequest {
     public void setVariables(Variables variables) {
         this.variables = variables;
     }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Variables {
 

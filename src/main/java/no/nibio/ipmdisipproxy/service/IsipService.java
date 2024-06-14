@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * IsipService contains the code for posting requests to the ISIP siggetreide model endpoint.
  *
- * @since 0.0.1
+ * @since 1.0.0
  */
 @Service
 public class IsipService {

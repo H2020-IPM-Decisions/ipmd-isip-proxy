@@ -23,7 +23,7 @@ import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.createIsipReques
  * ApiController is a REST controller which provides an endpoint for triggering the siggetreide
  * model at ISIP. It converts requests and responses between the IPMD and ISIP formats.
  *
- * @since 0.0.1
+ * @since 1.0.0
  */
 @RestController
 public class ApiController {

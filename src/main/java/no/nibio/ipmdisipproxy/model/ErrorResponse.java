@@ -1,5 +1,8 @@
 package no.nibio.ipmdisipproxy.model;
 
+/**
+ * @since 1.0.0
+ */
 public class ErrorResponse {
     private String error;
     private String message;

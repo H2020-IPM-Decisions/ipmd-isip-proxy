@@ -2,6 +2,9 @@ package no.nibio.ipmdisipproxy.model;
 
 import java.util.List;
 
+/**
+ * @since 1.0.0
+ */
 public class IpmdLocationWeatherData {
     private Double longitude;
     private Double latitude;

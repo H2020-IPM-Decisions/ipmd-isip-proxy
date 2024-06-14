@@ -5,6 +5,9 @@ import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @since 1.0.0
+ */
 public enum Disease {
 
     BROWN_RUST("PUCCRE", "brown rust"),

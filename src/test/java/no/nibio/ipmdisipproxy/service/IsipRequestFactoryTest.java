@@ -14,6 +14,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * @since 1.0.0
+ */
 class IsipRequestFactoryTest {
 
     public static final List<Integer> PARAMETERS = Arrays.asList(1001, 2001, 3001);

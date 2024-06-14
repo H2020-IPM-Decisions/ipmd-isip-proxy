@@ -26,6 +26,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+/**
+ * @since 1.0.0
+ */
 @WebMvcTest(controllers = ApiController.class)
 public class ApiControllerTest {
     private static final String SIMULATION_DATE = "2024-05-01";

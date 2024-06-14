@@ -14,7 +14,7 @@ import java.util.List;
  * the creation logic, making it easier to manage the instantiation process.
  *
  * @see IpmdResponse
- * @since 0.0.1
+ * @since 1.0.0
  */
 public class IpmdResponseFactory {
 

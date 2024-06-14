@@ -1,5 +1,8 @@
 package no.nibio.ipmdisipproxy.model;
 
+/**
+ * @since 1.0.0
+ */
 public class IpmdRequest {
 
     private String modelId;

@@ -17,6 +17,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * @since 1.0.0
+ */
 class IpmdResponseFactoryTest {
 
     public static final String EUROPE_OSLO = "Europe/Oslo";

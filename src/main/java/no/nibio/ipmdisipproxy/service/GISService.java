@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * GISService contains logic for determining whether a given point is within Germany
  *
- * @since 0.0.2
+ * @since 1.0.0
  */
 @Service
 public class GISService {

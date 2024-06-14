@@ -2,6 +2,9 @@ package no.nibio.ipmdisipproxy.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @since 1.0.0
+ */
 public abstract class IpmdIsipProxyException extends RuntimeException {
 
     private final HttpStatus httpStatus;

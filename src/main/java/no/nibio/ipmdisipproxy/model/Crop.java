@@ -9,6 +9,9 @@ import java.util.stream.Stream;
 
 import static no.nibio.ipmdisipproxy.model.Disease.*;
 
+/**
+ * @since 1.0.0
+ */
 public enum Crop {
 
     WINTER_WHEAT("TRZAW", "winter wheat", BROWN_RUST, DTR, POWDERY_MILDEW, SEPTORIA_TRITICI, YELLOW_RUST),
