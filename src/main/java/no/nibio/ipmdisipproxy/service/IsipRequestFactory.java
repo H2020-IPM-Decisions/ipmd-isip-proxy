@@ -1,4 +1,4 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import no.nibio.ipmdisipproxy.model.*;
@@ -14,43 +14,61 @@ import java.util.stream.Stream;
 import static no.nibio.ipmdisipproxy.model.WeatherDataParameter.*;
 
 /**
- * RequestConverter contains methods for converting a given IPMD request to ISIP format
+ * Factory class for creating {@link IsipRequest} objects.
+ *
+ * <p>This class provides static methods for creating instances of {@link IsipRequest}. It abstracts
+ * the creation logic, making it easier to manage the instantiation process.
+ *
+ * @see IsipRequest
+ * @since 1.0.0
  */
-public class RequestConverter {
+public class IsipRequestFactory {
 
     /**
-     * Convert request from IPM Decisions format to ISIP format
+     * Create basic ISIP request from the given information
      *
      * @param crop           The crop to run model for
-     * @param longitude      The longitude
      * @param latitude       The latitude
+     * @param longitude      The longitude
      * @param simulationDate The simulation date, YYYY-MM-DD
-     * @param weatherData    The weather data in IPMD format
      * @return The ISIP request
      */
-    public static IsipRequest ipmdToIsipRequest(Crop crop, Disease disease, Double longitude, Double latitude, String simulationDate, IpmdWeatherData weatherData) {
+    public static IsipRequest createIsipRequest(
+            Crop crop, Disease disease, Double latitude, Double longitude, String simulationDate) {
+        return new IsipRequest(
+                latitude, longitude, simulationDate, crop.getIsipName(), disease.getIsipName());
+    }
+
+    public static void appendWeatherData(IsipRequest isipRequest, IpmdWeatherData weatherData) {
         IpmdLocationWeatherData locationWeatherData = weatherData.getLocationWeatherData().get(0);
         List<Integer> weatherParameters = weatherData.getWeatherParameters();
         List<List<Double>> weatherDataValues = locationWeatherData.getData();
 
-        IsipRequest isipRequest = new IsipRequest(longitude, latitude, simulationDate, crop.getIsipName(), disease.getIsipName());
-        isipRequest.getVariables().setDateTime(createDateTimeList(weatherData.getTimeStart(), weatherData.getTimeEnd(), weatherData.getInterval()));
-        isipRequest.getVariables().setT2m(convertWeatherDataParameterValues(weatherParameters, weatherDataValues, TEMPERATURE_INSTANT, TEMPERATURE_MEAN));
-        isipRequest.getVariables().setTotPrec(convertWeatherDataParameterValues(weatherParameters, weatherDataValues, PRECIPITATION));
-        isipRequest.getVariables().setRelhum2m(convertWeatherDataParameterValues(weatherParameters, weatherDataValues, HUMIDITY_INSTANT, HUMIDITY_MEAN));
-        return isipRequest;
+        IsipRequest.Variables variables = isipRequest.getVariables();
+        variables.setDateTime(
+                createDateTimeList(
+                        weatherData.getTimeStart(), weatherData.getTimeEnd(), weatherData.getInterval()));
+        variables.setT2m(
+                convertWeatherDataParameterValues(
+                        weatherParameters, weatherDataValues, TEMPERATURE_INSTANT, TEMPERATURE_MEAN));
+        variables.setTotPrec(
+                convertWeatherDataParameterValues(weatherParameters, weatherDataValues, PRECIPITATION));
+        variables.setRelhum2m(
+                convertWeatherDataParameterValues(
+                        weatherParameters, weatherDataValues, HUMIDITY_INSTANT, HUMIDITY_MEAN));
     }
 
-
     /**
-     * Create list of datetime strings from the given start time to the given end time, with given interval
+     * Create list of datetime strings from the given start time to the given end time, with given
+     * interval
      *
      * @param timeStart Start of period
      * @param timeEnd   End of period
      * @param interval  Interval in seconds
      * @return List of datetime strings in format 'yyyy-MM-dd HH:mm'
      */
-    public static List<String> createDateTimeList(ZonedDateTime timeStart, ZonedDateTime timeEnd, Integer interval) {
+    public static List<String> createDateTimeList(
+            ZonedDateTime timeStart, ZonedDateTime timeEnd, Integer interval) {
         DateTimeFormatter isipDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         List<String> dateTimeList = new ArrayList<>();
@@ -71,7 +89,10 @@ public class RequestConverter {
      * @param parameters          Which parameters should be included
      * @return A list of values for the given parameters
      */
-    public static List<Double> convertWeatherDataParameterValues(List<Integer> weatherParameters, List<List<Double>> locationWeatherData, WeatherDataParameter... parameters) {
+    public static List<Double> convertWeatherDataParameterValues(
+            List<Integer> weatherParameters,
+            List<List<Double>> locationWeatherData,
+            WeatherDataParameter... parameters) {
         int indexOfParameter = -1;
         for (WeatherDataParameter parameter : parameters) {
             if (weatherParameters.contains(parameter.getIpmCode())) {
@@ -80,8 +101,14 @@ public class RequestConverter {
             }
         }
         if (indexOfParameter < 0) {
-            String ipmCodesString = Stream.of(parameters).map(WeatherDataParameter::getIpmCode).map(String::valueOf).collect(Collectors.joining("/"));
-            throw new BadRequestException(String.format("Required weather data parameter [%s] missing from request", ipmCodesString));
+            String ipmCodesString =
+                    Stream.of(parameters)
+                            .map(WeatherDataParameter::getIpmCode)
+                            .map(String::valueOf)
+                            .collect(Collectors.joining("/"));
+            throw new BadRequestException(
+                    String.format(
+                            "Required weather data parameter [%s] missing from request", ipmCodesString));
         }
 
         List<Double> valueList = new ArrayList<>();

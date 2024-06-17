@@ -3,6 +3,9 @@ package no.nibio.ipmdisipproxy.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @since 1.0.0
+ */
 public class IpmdResponse {
 
     private String timeStart;
@@ -17,13 +20,13 @@ public class IpmdResponse {
 
     }
 
-    public IpmdResponse(String timeStart, String timeEnd, double longitude, double latitude) {
+    public IpmdResponse(String timeStart, String timeEnd, double latitude, double longitude) {
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
         this.resultParameters = new ArrayList<>();
         IpmdLocationResult lr = new IpmdLocationResult();
-        lr.setLongitude(longitude);
         lr.setLatitude(latitude);
+        lr.setLongitude(longitude);
         lr.setWarningStatus(new ArrayList<>());
         locationResult = new ArrayList<>();
         locationResult.add(lr);

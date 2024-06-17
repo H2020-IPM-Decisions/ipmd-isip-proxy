@@ -1,5 +1,8 @@
 package no.nibio.ipmdisipproxy.model;
 
+/**
+ * @since 1.0.0
+ */
 public enum WeatherDataParameter {
 
     TEMPERATURE_INSTANT(1001, "t_2m"),

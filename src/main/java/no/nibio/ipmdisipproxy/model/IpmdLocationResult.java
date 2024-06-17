@@ -1,9 +1,11 @@
 package no.nibio.ipmdisipproxy.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * @since 1.0.0
+ */
 public class IpmdLocationResult {
     private Double longitude;
     private Double latitude;

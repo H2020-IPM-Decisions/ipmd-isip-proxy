@@ -2,6 +2,9 @@ package no.nibio.ipmdisipproxy.model;
 
 import no.nibio.ipmdisipproxy.exception.ExternalApiException;
 
+/**
+ * @since 1.0.0
+ */
 public enum WarningStatus {
 
     OFF_SEASON(0, 0),

@@ -1,4 +1,4 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 
 /**
  * TimeService was introduced in order for the unit tests to be able to manipulate current date
+ *
+ * @since 1.0.0
  */
 @Service
 public class TimeService {

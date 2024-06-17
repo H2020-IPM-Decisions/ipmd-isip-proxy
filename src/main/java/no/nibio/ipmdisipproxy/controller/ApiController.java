@@ -1,25 +1,29 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.controller;
 
-import static no.nibio.ipmdisipproxy.api.RequestConverter.ipmdToIsipRequest;
-import static no.nibio.ipmdisipproxy.api.ResponseConverter.isipToImpdResponse;
-
-import java.util.List;
 import no.nibio.ipmdisipproxy.exception.BadRequestException;
 import no.nibio.ipmdisipproxy.exception.UnauthorizedException;
 import no.nibio.ipmdisipproxy.model.*;
+import no.nibio.ipmdisipproxy.service.GISService;
+import no.nibio.ipmdisipproxy.service.IsipService;
+import no.nibio.ipmdisipproxy.service.TimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static no.nibio.ipmdisipproxy.service.IpmdResponseFactory.createImpdResponse;
+import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.appendWeatherData;
+import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.createIsipRequest;
+
 /**
- * ApiController is a REST controller which provides an endpoint for triggering the siggetreide model
- * at ISIP. It converts requests and responses between the IPMD and ISIP formats.
+ * ApiController is a REST controller which provides an endpoint for triggering the siggetreide
+ * model at ISIP. It converts requests and responses between the IPMD and ISIP formats.
  *
- * @since 0.0.1
+ * @since 1.0.0
  */
 @RestController
 public class ApiController {
@@ -27,14 +31,13 @@ public class ApiController {
 
     private final IsipService isipService;
     private final TimeService timeService;
-
-    @Value("${model.base.url}")
-    private String baseUrl;
+    private final GISService gisService;
 
     @Autowired
-    public ApiController(IsipService isipService, TimeService timeService) {
+    public ApiController(IsipService isipService, TimeService timeService, GISService gisService) {
         this.isipService = isipService;
         this.timeService = timeService;
+        this.gisService = gisService;
     }
 
     @GetMapping("/")
@@ -45,7 +48,8 @@ public class ApiController {
     @PostMapping("/siggetreide")
     public ResponseEntity<IpmdResponse> triggerSiggetreide(
             @RequestBody IpmdRequest ipmdRequest,
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationHeader) {
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false)
+            String authorizationHeader) {
 
         String token = extractTokenFromHeader(authorizationHeader);
         String simulationDate = timeService.getCurrentDate().toString();
@@ -56,30 +60,28 @@ public class ApiController {
         validateParameters(crop, disease, weatherData);
 
         IpmdLocationWeatherData locationWeatherData = weatherData.getLocationWeatherData().get(0);
-
-        Double longitude = locationWeatherData.getLongitude();
         Double latitude = locationWeatherData.getLatitude();
+        Double longitude = locationWeatherData.getLongitude();
 
-        IsipRequest isipRequest = ipmdToIsipRequest(
-                crop,
-                disease,
-                longitude,
-                latitude,
-                simulationDate,
-                ipmdRequest.getWeatherData()
-        );
-        LOGGER.info("Trigger siggetreide with crop={} and disease={}", crop.getIsipName(), disease.getIsipName());
+        IsipRequest isipRequest = createIsipRequest(crop, disease, latitude, longitude, simulationDate);
+        if (!gisService.isLocationInGermany(latitude, longitude)) {
+            LOGGER.info(
+                    "Given location ({}, {}) is not in Germany, add weather data to request",
+                    latitude,
+                    longitude);
+            appendWeatherData(isipRequest, ipmdRequest.getWeatherData());
+        }
+
+        LOGGER.info(
+                "Trigger siggetreide with crop={} and disease={}",
+                crop.getIsipName(),
+                disease.getIsipName());
         return ResponseEntity.ok(
-                isipToImpdResponse(
+                createImpdResponse(
                         ipmdRequest.getTimeZone(),
-                        longitude,
-                        latitude,
+                        latitude, longitude,
                         disease,
-                        isipService.triggerSiggetreide(
-                            isipRequest,
-                            token
-                        )
-                ));
+                        isipService.triggerSiggetreide(isipRequest, token)));
     }
 
     /**
@@ -105,15 +107,19 @@ public class ApiController {
      */
     private void validateParameters(Crop crop, Disease disease, IpmdWeatherData weatherData) {
         if (!crop.isCropDisease(disease)) {
-            throw new BadRequestException(String.format("Given crop/disease combination (%s/%s) is not valid", crop.getEppoCode(), disease.getEppoCode()));
+            throw new BadRequestException(
+                    String.format(
+                            "Given crop/disease combination (%s/%s) is not valid",
+                            crop.getEppoCode(), disease.getEppoCode()));
         }
         if (weatherData == null) {
             throw new BadRequestException("Weather data missing from request");
         }
         List<IpmdLocationWeatherData> locationWeatherDataList = weatherData.getLocationWeatherData();
         if (locationWeatherDataList.size() != 1) {
-            throw new BadRequestException("Unexpected number of location weather data in request: " + locationWeatherDataList.size());
+            throw new BadRequestException(
+                    "Unexpected number of location weather data in request: "
+                            + locationWeatherDataList.size());
         }
     }
-
 }

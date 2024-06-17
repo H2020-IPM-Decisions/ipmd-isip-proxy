@@ -15,6 +15,9 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @since 1.0.0
+ */
 @Configuration
 public class AppConfig {
 

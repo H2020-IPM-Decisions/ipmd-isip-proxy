@@ -22,18 +22,44 @@ Clone the Github repository to get the latest version of the code
 $ git clone 
 ```
 
-Build and test the source code
+### Build and test the source code
 
 ```
-$ .mvnw clean install 
+$ ./mvnw clean install 
 ```
 
-Run application locally
+### Run application
+
+The application will by default run on the port `13085` and context path `/ipmd`, and it will write to a log file located at the relative path `logs/ipmd-isip-proxy.log`.
 
 ```
-$ .mvnw spring-boot:run
+$ ./mvnw spring-boot:run
 ```
-Minimal example request to trigger the endpoint. Please note that you will need a token with access to the ISIP API.
+
+If you need to configure these settings, you can start the application like this:
+
+```
+$ ./mvnw spring-boot:run -Dspring-boot.run.arguments="--PORT=13 --CONTEXT_PATH=/alternative --LOG_FILE=logs/another_file.log"
+```
+
+### Package application
+
+```
+$ ./mvnw clean package
+```
+
+Run jar file with default settings:
+```
+$ java -jar target/ipmd-isip-proxy-1.0.0.jar
+```
+or configured:
+```
+$ java -jar target/ipmd-isip-proxy-1.0.0.jar --PORT=13 --CONTEXT_PATH=/alternative --LOG_FILE=logs/another_file.log
+```
+
+### Test endpoint locally
+
+Minimal example request to trigger the endpoint, when application is run with default settings. Please note that you will need a token with access to the ISIP API.
 The token is forwarded to ISIP by the proxy.
 
 ```

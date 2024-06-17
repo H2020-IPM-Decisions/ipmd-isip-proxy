@@ -1,4 +1,4 @@
-package no.nibio.ipmdisipproxy.api;
+package no.nibio.ipmdisipproxy.service;
 
 import no.nibio.ipmdisipproxy.exception.ExternalApiException;
 import no.nibio.ipmdisipproxy.model.IsipRequest;
@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+/**
+ * @since 1.0.0
+ */
 @SpringBootTest
 class IsipServiceTest {
 

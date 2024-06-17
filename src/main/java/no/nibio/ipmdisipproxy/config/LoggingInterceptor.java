@@ -1,6 +1,5 @@
 package no.nibio.ipmdisipproxy.config;
 
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -8,6 +7,11 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.io.IOException;
+
+/**
+ * @since 1.0.0
+ */
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingInterceptor.class);
 
@@ -30,6 +34,5 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         LOGGER.trace("Status code: " + response.getStatusCode());
         LOGGER.trace("Status text: " + response.getStatusText());
         LOGGER.trace("Headers: " + response.getHeaders());
-        //LOGGER.info("Response body: " + StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8));
     }
 }
