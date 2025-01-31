@@ -10,7 +10,7 @@
     </parent>
     <groupId>no.nibio</groupId>
     <artifactId>ipmd-isip-proxy</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>ipmd-isip-proxy</name>
     <description>Proxy for IPMD-ISIP communication</description>
     <properties>
