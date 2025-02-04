@@ -1,23 +1,31 @@
 package no.nibio.ipmdisipproxy.controller;
 
-import no.nibio.ipmdisipproxy.exception.BadRequestException;
-import no.nibio.ipmdisipproxy.exception.UnauthorizedException;
-import no.nibio.ipmdisipproxy.model.*;
-import no.nibio.ipmdisipproxy.service.GISService;
-import no.nibio.ipmdisipproxy.service.IsipService;
-import no.nibio.ipmdisipproxy.service.TimeService;
+import static no.nibio.ipmdisipproxy.service.IpmdResponseFactory.createImpdResponse;
+import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.appendWeatherData;
+import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.createIsipRequest;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static no.nibio.ipmdisipproxy.service.IpmdResponseFactory.createImpdResponse;
-import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.appendWeatherData;
-import static no.nibio.ipmdisipproxy.service.IsipRequestFactory.createIsipRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import no.nibio.ipmdisipproxy.exception.BadRequestException;
+import no.nibio.ipmdisipproxy.exception.UnauthorizedException;
+import no.nibio.ipmdisipproxy.model.Crop;
+import no.nibio.ipmdisipproxy.model.Disease;
+import no.nibio.ipmdisipproxy.model.IpmdLocationWeatherData;
+import no.nibio.ipmdisipproxy.model.IpmdRequest;
+import no.nibio.ipmdisipproxy.model.IpmdResponse;
+import no.nibio.ipmdisipproxy.model.IpmdWeatherData;
+import no.nibio.ipmdisipproxy.model.IsipRequest;
+import no.nibio.ipmdisipproxy.service.GISService;
+import no.nibio.ipmdisipproxy.service.IsipService;
+import no.nibio.ipmdisipproxy.service.TimeService;
 
 /**
  * ApiController is a REST controller which provides an endpoint for triggering the siggetreide
@@ -53,6 +61,7 @@ public class ApiController {
 
         String token = extractTokenFromHeader(authorizationHeader);
         String simulationDate = timeService.getCurrentDate().toString();
+        LOGGER.info("Request received: {}", ipmdRequest);
 
         Crop crop = Crop.fromEppoCode(ipmdRequest.getCrop());
         Disease disease = Disease.fromEppoCode(ipmdRequest.getModelId());

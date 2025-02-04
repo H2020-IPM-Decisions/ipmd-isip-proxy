@@ -43,4 +43,13 @@ public class IpmdRequest {
         this.weatherData = weatherData;
     }
 
+    @Override
+    public String toString() {
+        return "IpmdRequest{" +
+            "modelId='" + modelId + '\'' +
+            ", crop='" + crop + '\'' +
+            ", timeZone='" + timeZone + '\'' +
+            ", weatherData.weatherParameters=" + weatherData.getWeatherParameters() +
+            '}';
+    }
 }
