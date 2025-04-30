@@ -116,6 +116,15 @@ public class IsipResponse {
                 this.variables = variables;
             }
 
+            @Override
+            public String toString() {
+                return "Result{" +
+                    "attributes=" + attributes +
+                    ", dimensions=" + dimensions +
+                    ", variables=" + variables +
+                    '}';
+            }
+
             public static class Attributes {
                 private String id;
                 private String path;
@@ -144,6 +153,15 @@ public class IsipResponse {
 
                 public void setForecastDate(String forecastDate) {
                     this.forecastDate = forecastDate;
+                }
+
+                @Override
+                public String toString() {
+                    return "Attributes{" +
+                        "id='" + id + '\'' +
+                        ", path='" + path + '\'' +
+                        ", forecastDate='" + forecastDate + '\'' +
+                        '}';
                 }
             }
 
@@ -196,6 +214,16 @@ public class IsipResponse {
 
                 public void setData(List<String> data) {
                     this.data = data;
+                }
+
+                @Override
+                public String toString() {
+                    return "Variable{" +
+                        "attributes=" + attributes +
+                        ", type='" + type + '\'' +
+                        ", shape=" + shape +
+                        ", data=" + data +
+                        '}';
                 }
 
                 public static class Attributes {
@@ -263,8 +291,29 @@ public class IsipResponse {
                     public void setLegend(String legend) {
                         this.legend = legend;
                     }
+
+                    @Override
+                    public String toString() {
+                        return "Attributes{" +
+                            "description='" + description + '\'' +
+                            ", units='" + units + '\'' +
+                            ", timeZone='" + timeZone + '\'' +
+                            ", interval='" + interval + '\'' +
+                            ", aggregate='" + aggregate + '\'' +
+                            ", link='" + link + '\'' +
+                            ", legend='" + legend + '\'' +
+                            '}';
+                    }
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "IsipResponse{" +
+            "attributes=" + attributes +
+            ", nodes=" + nodes +
+            '}';
     }
 }

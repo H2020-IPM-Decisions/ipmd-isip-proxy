@@ -1,6 +1,9 @@
 package no.nibio.ipmdisipproxy.service;
 
+import no.nibio.ipmdisipproxy.exception.ExternalApiException;
 import no.nibio.ipmdisipproxy.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +20,8 @@ import java.util.List;
  * @since 1.0.0
  */
 public class IpmdResponseFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IpmdResponseFactory.class);
+
 
     /**
      * Create IPMD response based on the given information
@@ -39,6 +44,13 @@ public class IpmdResponseFactory {
 
         IpmdLocationResult ipmdLocationResult = ipmdResponse.getLocationResult().get(0);
         List<Integer> warningStatusList = ipmdLocationResult.getWarningStatus();
+
+        if(diseaseResult.getData() == null) {
+            LOGGER.error("No disease data found in response from ISIP");
+            LOGGER.debug("IsipResponse received: {}", isipResponse);
+            throw new ExternalApiException(String.format("Unable to get result for %s with timeZone=%s, latitude=%s and longitude=%s", disease.getIsipName(), timeZone, latitude, longitude));
+        }
+
         for (String value : diseaseResult.getData()) {
             WarningStatus ws = WarningStatus.fromIsipCode(Integer.parseInt(value));
             warningStatusList.add(ws.getIpmCode());
