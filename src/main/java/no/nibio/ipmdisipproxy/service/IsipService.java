@@ -1,11 +1,15 @@
 package no.nibio.ipmdisipproxy.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nibio.ipmdisipproxy.exception.ExternalApiException;
 import no.nibio.ipmdisipproxy.model.IsipRequest;
 import no.nibio.ipmdisipproxy.model.IsipResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,21 +26,28 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class IsipService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IsipService.class);
-    private static final String PARAM_TOKEN = "pld";
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Value("${model.base.url}")
     private String baseUrl;
 
-    public IsipService(RestTemplate restTemplate) {
+    public IsipService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public IsipResponse triggerSiggetreide(IsipRequest isipRequest, String token) {
-        String url = buildUrl(token);
+        String url = buildUrl();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<IsipRequest> entity = new HttpEntity<>(isipRequest, headers);
+        LOGGER.info("ISIP outbound request method=POST, url={}, auth=Bearer {}", url, maskToken(token));
+        LOGGER.info("ISIP outbound headers: {}", headers.toSingleValueMap());
+        LOGGER.info("ISIP outbound body: {}", asJson(isipRequest));
         ResponseEntity<IsipResponse> response;
         try {
-            response = restTemplate.postForEntity(url, isipRequest, IsipResponse.class);
+            response = restTemplate.postForEntity(url, entity, IsipResponse.class);
         } catch (HttpClientErrorException e) {
             LOGGER.error("Client error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
             throw new ExternalApiException("Client error occurred: " + e.getMessage(), e);
@@ -57,9 +68,27 @@ public class IsipService {
         throw new ExternalApiException("Failed to get a successful response from the server. Status code: " + response.getStatusCode());
     }
 
-    private String buildUrl(String token) {
+    private String buildUrl() {
         return UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam(PARAM_TOKEN, token)
                 .toUriString();
+    }
+
+    private String maskToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return "<empty>";
+        }
+        if (token.length() <= 6) {
+            return "***";
+        }
+        return token.substring(0, 3) + "..." + token.substring(token.length() - 3);
+    }
+
+    private String asJson(IsipRequest isipRequest) {
+        try {
+            return objectMapper.writeValueAsString(isipRequest);
+        } catch (JsonProcessingException e) {
+            LOGGER.warn("Failed to serialize ISIP request body for logging", e);
+            return "<serialization failed>";
+        }
     }
 }
