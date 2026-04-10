@@ -42,9 +42,7 @@ public class IsipService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<IsipRequest> entity = new HttpEntity<>(isipRequest, headers);
-        LOGGER.info("ISIP outbound request method=POST, url={}, auth=Bearer {}", url, maskToken(token));
-        LOGGER.info("ISIP outbound headers: {}", headers.toSingleValueMap());
-        LOGGER.info("ISIP outbound body: {}", asJson(isipRequest));
+        LOGGER.debug("ISIP outbound request method=POST, url={}, auth=Bearer {}", url, maskToken(token));
         ResponseEntity<IsipResponse> response;
         try {
             response = restTemplate.postForEntity(url, entity, IsipResponse.class);
@@ -83,12 +81,4 @@ public class IsipService {
         return token.substring(0, 3) + "..." + token.substring(token.length() - 3);
     }
 
-    private String asJson(IsipRequest isipRequest) {
-        try {
-            return objectMapper.writeValueAsString(isipRequest);
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Failed to serialize ISIP request body for logging", e);
-            return "<serialization failed>";
-        }
-    }
 }
